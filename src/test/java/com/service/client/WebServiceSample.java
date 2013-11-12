@@ -15,13 +15,10 @@ import javax.xml.ws.ResponseWrapper;
  * 
  */
 @WebService(targetNamespace = "http://service.com/", name = "WebServiceSample")
-@XmlSeeAlso({ObjectFactory.class})
 public interface WebServiceSample {
 
     @WebResult(name = "return", targetNamespace = "")
-    @RequestWrapper(localName = "say", targetNamespace = "http://service.com/", className = "com.service.client.Say")
     @WebMethod
-    @ResponseWrapper(localName = "sayResponse", targetNamespace = "http://service.com/", className = "com.service.client.SayResponse")
     public String say(
             @WebParam(name = "arg0", targetNamespace = "")
             String arg0
