@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jaxws="http://cxf.apache.org/jaxws"
+       xsi:schemaLocation="
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
+
+    <!-- jar包中自带的cxf文件夹下的*.xml文件 -->
+    <import resource="classpath:META-INF/cxf/cxf.xml"/>
+    <import resource="classpath:META-INF/cxf/cxf-extension-soap.xml"/>
+    <import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>
+    <!-- 以上未基本配置，必须，位置在cxf jar中 -->
+    <jaxws:endpoint id="webServiceSample" address="/WebServiceSample"
+                    implementor="com.service.impl.WebServiceSampleImpl">
+        <!--inInterceptors表示被外部调用时，调用此拦截器 -->
+        <jaxws:inInterceptors>
+            <bean class="org.apache.cxf.binding.soap.saaj.SAAJInInterceptor"/>
+            <bean class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">
+                <constructor-arg>
+                    <map>
+                        <!-- 设置加密类型 -->
+                        <entry key="action" value="UsernameToken"/>
+                        <!-- 设置密码类型为明文 -->
+                        <entry key="passwordType" value="PasswordText"/>
+                        <!--<entry key="action" value="UsernameToken Timestamp" /> 设置密码类型为加密<entry
+                            key="passwordType" value="PasswordDigest" /> -->
+                        <entry key="passwordCallbackClass" value="com.service.handler.WsAuthHandler"/>
+                    </map>
+                </constructor-arg>
+            </bean>
+        </jaxws:inInterceptors>
+    </jaxws:endpoint>
+</beans>
